@@ -1,6 +1,18 @@
 from flask import Flask, request, jsonify
 import requests
 from openai import OpenAI
+import os
+import json
+from firebase_admin import credentials, initialize_app
+
+firebase_key = os.getenv('FIREBASE_KEY')
+if firebase_key:
+    with open('/etc/secrets/firebase-key.json', 'w') as f:
+        f.write(firebase_key)
+
+# Inicializar Firebase
+cred = credentials.Certificate('/etc/secrets/firebase-key.json')
+initialize_app(cred)
 
 # Configuración de DeepSeek API
 api_key = 'sk-e33494f4827746be9d784b126b5b5623'
@@ -8,7 +20,7 @@ api_base = 'https://api.deepseek.com'
 client = OpenAI(api_key=api_key, base_url=api_base)
 
 # Training data for chatbot
-chatbot_train_data = r'C:\Users\tomyy\OneDrive\Documentos\AI Clients\sofisticate_beauty\german_train_data.txt'
+chatbot_train_data = r'german_train_data.txt'
 
 with open(chatbot_train_data, 'r', encoding='utf-8') as file:
     business_info = file.read().strip()
@@ -38,7 +50,6 @@ VERIFY_TOKEN = '123456'
 @app.route("/webhook", methods=["GET", "POST"])
 def webhook():
     data = request.get_json()
-    # print("📩 Webhook recibido:", data)
 
     if request.method == "GET":  # Validación del Webhook
         token = request.args.get("hub.verify_token")
@@ -57,21 +68,15 @@ def webhook():
                             if "text" in message:
                                 user_text = message["text"]["body"]
                                 sender = message["from"]
-                                # print(f"👤 Usuario: {sender}, 📩 Mensaje: {user_text}")
                                 bot_response = chat_with_deepseek(user_text)
-                                # print(f"🤖 Respuesta del bot: {bot_response}")
                                 send_whatsapp_message(sender, bot_response)
         return jsonify({"status": "received"})
 
 # Función para enviar mensajes de WhatsApp
 def send_whatsapp_message(to, text):
     headers = {"Authorization": f"Bearer {ACCESS_TOKEN}", "Content-Type": "application/json"}
-    data = {"messaging_product": "whatsapp", "to": PHONE_NUMBER_SAMUEL
-            , "type": "text", "text": {"body": str(text)}} # to, PHONE_NUMBER_SAMUEL
-    # requests.post(WHATSAPP_API_URL, headers=headers, json=data)
+    data = {"messaging_product": "whatsapp", "to": to, "type": "text", "text": {"body": str(text)}} # to, PHONE_NUMBER_SAMUEL
     response = requests.post(WHATSAPP_API_URL, headers=headers, json=data)
-    # print("📤 Enviando mensaje a WhatsApp:", data)
-    # print("📬 Respuesta de WhatsApp:", response.json())
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
