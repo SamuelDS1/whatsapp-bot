@@ -17,11 +17,11 @@ db = firestore.client()
 
 # Configuración de DeepSeek API
 api_key = os.getenv('DEEPSEEK_API_KEY') # 'sk-e33494f4827746be9d784b126b5b5623'
-api_base = 'https://api.deepseek.com'
+api_base = os.getenv('DEEPSEEK_API_BASE', 'https://api.deepseek.com')
 client = OpenAI(api_key=api_key, base_url=api_base)
 
 # Training data for chatbot
-chatbot_train_data = 'business_train_data.txt'
+chatbot_train_data = os.getenv('CHATBOT_TRAIN_DATA_PATH', 'data/german_train_data.txt')
 with open(chatbot_train_data, 'r', encoding='utf-8') as file:
     business_info = file.read().strip()
 
