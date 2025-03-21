@@ -7,6 +7,7 @@ import pandas as pd
 import re
 import firebase_admin
 from firebase_admin import credentials, firestore
+import base64
 
 # Firestore
 firebase_credentials_base64 = os.getenv('FIREBASE_CREDENTIALS_BASE64')
