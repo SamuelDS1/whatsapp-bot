@@ -153,7 +153,7 @@ def webhook():
 
     elif request.method == "POST":  # Manejo de mensajes
         data = request.get_json()
-        print("📩 Webhook recibido:", data)
+        # print("📩 Webhook recibido:", data)
         data = request.get_json()
         if data and "entry" in data:
             for entry in data["entry"]:
