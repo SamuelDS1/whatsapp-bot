@@ -22,14 +22,13 @@ client = OpenAI(api_key=api_key, base_url=api_base)
 
 # Training data for chatbot
 chatbot_train_data = 'business_train_data.txt'
-
 with open(chatbot_train_data, 'r', encoding='utf-8') as file:
     business_info = file.read().strip()
 
 # Configuración de WhatsApp Cloud API
-TU_PHONE_NUMBER_IDz = '592229297297867' # 592229297297867 (wa_chatbot)
+TU_PHONE_NUMBER_IDz = os.getenv('WHATSAPP_PHONE_NUMBER_ID') # 592229297297867 (wa_chatbot)
 WHATSAPP_API_URL = f"https://graph.facebook.com/v22.0/{TU_PHONE_NUMBER_IDz}/messages"
-ACCESS_TOKEN = "EAAIcwRTOMDYBOyeenWgTKRy6ws9zRhplT78j52b6WZBmo77sHTXvab0CxJA4n0FZCw0z6nEp4KCOjATJnAEWZCrtYGEPCTlQ4OxZBFwvUZClTa75i3UbnQNlOfQhR3IFCwZCK1COuGZAQukZBE3JNyV28m71dZBI8wAGGiXYjJ5aVKdgfNGfwU4HJraAqZBZCpZAcKaN1vF4Yb78vwGCZArDv6GlQ8u69179bvbPmCskZBoOi8Dg1Q"
+ACCESS_TOKEN = os.getenv('WHATSAPP_ACCESS_TOKEN')
 
 app = Flask(__name__)
 
