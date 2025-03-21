@@ -21,7 +21,7 @@ api_base = os.getenv('DEEPSEEK_API_BASE', 'https://api.deepseek.com')
 client = OpenAI(api_key=api_key, base_url=api_base)
 
 # Training data for chatbot
-chatbot_train_data = os.getenv('CHATBOT_TRAIN_DATA_PATH', 'data/german_train_data.txt')
+chatbot_train_data = os.getenv('CHATBOT_TRAIN_DATA_PATH', 'german_train_data.txt')
 with open(chatbot_train_data, 'r', encoding='utf-8') as file:
     business_info = file.read().strip()
 
