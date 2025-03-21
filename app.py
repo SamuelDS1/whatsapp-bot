@@ -9,7 +9,14 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 
 # Firestore
-cred = credentials.Certificate(os.getenv('FIREBASE_CREDENTIALS_PATH'))  # Reemplaza con la ruta a tu archivo JSON
+firebase_credentials_base64 = os.getenv('FIREBASE_CREDENTIALS_BASE64')
+
+# Decodificar el JSON desde base64
+firebase_credentials_json = base64.b64decode(firebase_credentials_base64).decode('utf-8')
+firebase_credentials = json.loads(firebase_credentials_json)
+
+# Inicializar Firebase con las credenciales
+cred = credentials.Certificate(firebase_credentials)
 firebase_admin.initialize_app(cred)
 
 # Obtener una referencia a Firestore
